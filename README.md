@@ -1,11 +1,10 @@
-# ChoreHarmony
+# Chore Harmony
 
-ChoreHarmony is a multi-user Android application that helps university students manage the chores in their shared household. It is intended for the efficient tracking, and completion of chores in an equitable way for all roommates in a household. It is also meant to facilitate communication between household members. ChoreHarmony helps us live together harmoniously!
+Chore Harmony is a multi-user Android application that helps university students manage the chores in their shared household. It is intended for the efficient tracking, and completion of chores in an equitable way for all roommates in a household. It is also meant to facilitate communication between household members. Chore Harmony helps us live together harmoniously!
 
-<img width="293" alt="4" src="https://github.com/user-attachments/assets/301b395a-e955-4ce1-8601-2eacbc59608a" />
-<img width="293" alt="3" src="https://github.com/user-attachments/assets/58ea1bd1-91b1-4315-8b04-e971e5af763d" />
 <img width="293" alt="2" src="https://github.com/user-attachments/assets/f1fb91a9-b510-4c8d-9ccd-7156e83357a6" />
-<img width="293" alt="1" src="https://github.com/user-attachments/assets/8f8412a0-97ea-41e7-8eaf-bdaf774d3ab2" />
+<img width="293" alt="3" src="https://github.com/user-attachments/assets/58ea1bd1-91b1-4315-8b04-e971e5af763d" />
+<img width="293" alt="4" src="https://github.com/user-attachments/assets/301b395a-e955-4ce1-8601-2eacbc59608a" />
 
 ## Features
 
