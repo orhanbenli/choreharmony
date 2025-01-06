@@ -1,0 +1,3 @@
+type ChoreIdRequest = {
+  choreId: number;
+};

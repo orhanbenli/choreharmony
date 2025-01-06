@@ -1,0 +1,137 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id Int [pk, increment]
+  email String [unique, not null]
+  password String [not null]
+  first_name String [not null]
+  last_name String [not null]
+  email_notifications_enabled Boolean [not null, default: true]
+  household_power Int [not null, default: 100]
+  households Household [not null]
+  memberships HouseholdMembership [not null]
+  chores Chore [not null]
+  chats HouseholdChat [not null]
+  notifications Notification [not null]
+  source_trades TradeRequests [not null]
+  destination_trades TradeRequests [not null]
+  reviewer UserReviews [not null]
+  reviewee UserReviews [not null]
+}
+
+Table UserEmailVerification {
+  id Int [pk, increment]
+  email String [unique, not null]
+  code Int [not null]
+}
+
+Table Household {
+  id Int [pk, increment]
+  join_code String [unique, not null]
+  name String [not null]
+  owner_id Int [not null]
+  owner User [not null]
+  members HouseholdMembership [not null]
+  chores Chore [not null]
+  chats HouseholdChat [not null]
+}
+
+Table HouseholdMembership {
+  id Int [pk, increment]
+  user_id Int [not null]
+  household_id Int [not null]
+  pending_flag Boolean [not null]
+  household Household [not null]
+  user User [not null]
+}
+
+Table Chore {
+  id Int [pk, increment]
+  name String [not null]
+  completion_date DateTime
+  recurrence_in_days Int
+  household_id Int [not null]
+  assigned_user_id Int
+  last_reminder_date DateTime
+  user User
+  household Household [not null]
+  trades TradeRequests [not null]
+}
+
+Table HouseholdChat {
+  id Int [pk, increment]
+  user_id Int [not null]
+  household_id Int [not null]
+  message String [not null]
+  create_date DateTime [not null]
+  household Household [not null]
+  user User [not null]
+}
+
+Table Notification {
+  id Int [pk, increment]
+  destination_user_id Int [not null]
+  notification_type String [not null]
+  navigator_id Int
+  content String [not null]
+  create_date DateTime [not null]
+  destination_user User [not null]
+}
+
+Table TradeRequests {
+  id Int [pk, increment]
+  source_user_id Int [not null]
+  destination_user_id Int [not null]
+  chore_id Int [not null]
+  household_power Int [not null]
+  source_user User [not null]
+  destination_user User [not null]
+  chore Chore [not null]
+}
+
+Table UserReviews {
+  id Int [pk, increment]
+  reviewer_user_id Int [not null]
+  reviewee_user_id Int [not null]
+  review_comment_id Int [not null]
+  like Boolean [not null]
+  reviewer User [not null]
+  reviewee User [not null]
+  comment ReviewComments [not null]
+}
+
+Table ReviewComments {
+  id Int [pk, increment]
+  comment String [not null]
+  reviews UserReviews [not null]
+}
+
+Ref: Household.owner_id > User.id [delete: Cascade]
+
+Ref: HouseholdMembership.household_id > Household.id [delete: Cascade]
+
+Ref: HouseholdMembership.user_id > User.id [delete: Cascade]
+
+Ref: Chore.assigned_user_id > User.id [delete: Cascade]
+
+Ref: Chore.household_id > Household.id [delete: Cascade]
+
+Ref: HouseholdChat.household_id > Household.id [delete: Cascade]
+
+Ref: HouseholdChat.user_id > User.id [delete: Cascade]
+
+Ref: Notification.destination_user_id > User.id [delete: Cascade]
+
+Ref: TradeRequests.source_user_id > User.id [delete: Cascade]
+
+Ref: TradeRequests.destination_user_id > User.id [delete: Cascade]
+
+Ref: TradeRequests.chore_id > Chore.id [delete: Cascade]
+
+Ref: UserReviews.reviewer_user_id > User.id [delete: Cascade]
+
+Ref: UserReviews.reviewee_user_id > User.id [delete: Cascade]
+
+Ref: UserReviews.review_comment_id > ReviewComments.id [delete: Cascade]

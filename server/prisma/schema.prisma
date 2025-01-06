@@ -1,0 +1,123 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator dbml {
+  provider   = "prisma-dbml-generator"
+  output     = "../"
+  outputName = "database.dbml"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  Int                   @id @default(autoincrement())
+  email               String                @unique
+  password            String
+  first_name          String
+  last_name           String
+  email_notifications_enabled Boolean @default(true)
+  household_power Int @default(100)
+  households           Household[]
+  memberships HouseholdMembership[]
+  chores Chore[]
+  chats HouseholdChat[]
+  notifications Notification[]
+  source_trades TradeRequests[] @relation("source_trade")
+  destination_trades TradeRequests[] @relation("destination_trade")
+  reviewer UserReviews[] @relation("reviewer")
+  reviewee UserReviews[] @relation("reviewee")
+}
+
+model UserEmailVerification {
+  id    Int    @id @default(autoincrement())
+  email String @unique
+  code  Int
+}
+
+model Household {
+  id                  Int                   @id @default(autoincrement())
+  join_code           String                @unique
+  name                String
+  owner_id            Int
+  owner                User                  @relation(fields: [owner_id], references: [id], onDelete: Cascade)
+  members HouseholdMembership[]
+  chores Chore[]
+  chats HouseholdChat[]
+}
+
+model HouseholdMembership {
+  id           Int       @id @default(autoincrement())
+  user_id      Int
+  household_id Int
+  pending_flag Boolean
+  household    Household @relation(fields: [household_id], references: [id], onDelete: Cascade)
+  user         User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model Chore {
+  id                      Int                 @id @default(autoincrement())
+  name                    String
+  completion_date         DateTime?
+  recurrence_in_days      Int?
+  household_id Int
+  assigned_user_id Int?
+  last_reminder_date      DateTime?
+  user User? @relation(fields: [assigned_user_id], references: [id], onDelete: Cascade)
+  household Household @relation(fields: [household_id], references: [id], onDelete: Cascade)
+  trades TradeRequests[]
+}
+
+model HouseholdChat {
+  id          Int      @id @default(autoincrement())
+  user_id     Int
+  household_id     Int
+  message     String
+  create_date DateTime
+  household        Household     @relation(fields: [household_id], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id                  Int      @id @default(autoincrement())
+  destination_user_id Int
+  notification_type   String
+  navigator_id        Int?
+  content             String
+  create_date         DateTime
+  destination_user    User     @relation(fields: [destination_user_id], references: [id], onDelete: Cascade)
+}
+
+model TradeRequests {
+  id Int @id @default(autoincrement())
+  source_user_id Int
+  destination_user_id Int
+  chore_id Int
+  household_power Int
+  
+  source_user User @relation(name: "source_trade", fields: [source_user_id], references: [id], onDelete: Cascade)
+  destination_user User @relation(name: "destination_trade", fields: [destination_user_id], references: [id], onDelete: Cascade)
+  chore Chore @relation(fields: [chore_id], references: [id], onDelete: Cascade)
+}
+
+model UserReviews {
+  id Int @id @default(autoincrement())
+  reviewer_user_id Int
+  reviewee_user_id Int
+  review_comment_id Int
+  like Boolean
+
+  reviewer User @relation(name: "reviewer", fields: [reviewer_user_id], references: [id], onDelete: Cascade)
+  reviewee User @relation(name: "reviewee", fields: [reviewee_user_id], references: [id], onDelete: Cascade)
+  comment ReviewComments @relation(fields: [review_comment_id], references: [id], onDelete: Cascade)
+}
+
+model ReviewComments {
+  id Int @id @default(autoincrement())
+  comment String
+
+  reviews UserReviews[]
+}

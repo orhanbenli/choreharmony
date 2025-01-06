@@ -1,0 +1,3 @@
+type CreateHouseholdRequest = {
+  name: string;
+};

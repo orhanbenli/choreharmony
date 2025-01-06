@@ -1,0 +1,3 @@
+type HouseholdJoinRequest = {
+  joinCode: string;
+};

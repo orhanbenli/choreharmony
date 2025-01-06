@@ -1,0 +1,3 @@
+type NotificationIdRequest = {
+  notificationId: number;
+};
